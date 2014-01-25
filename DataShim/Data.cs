@@ -5,53 +5,123 @@
 // ======================== EO LICENSE ===============================
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace org.rufwork.polyfills.data
 {
-    public class DictionaryPlusColumn : Dictionary<string, DataColumn>
+    public sealed class DictionaryBackedSet<T> : IEnumerable<T>
     {
-        public DataColumn this[int intIndex]
+        private readonly Dictionary<object, T> dict = new Dictionary<object, T>();
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return dict.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public bool Add(T item)
+        {
+            if (Contains(item))
+            {
+                return false;
+            }
+            // MEGATODO: Needs to be changed to take the DataColumn's name when T is a Datacolumn.
+            // Waiting until I extend properly, howeer.  Hacky for testing now.
+            string strRandomKey = Guid.NewGuid().ToString();
+            Console.WriteLine("Random key: " + strRandomKey);
+            dict.Add(strRandomKey, item);
+            return true;
+        }
+
+        public bool Contains(T item)
+        {
+            return dict.ContainsValue(item);
+        }
+
+        public int Count
         {
             get
             {
-                return this.ElementAt(intIndex).Value;
-            }
-            set
-            {
-                this[this.ElementAt(intIndex).Key] = value;
+                return dict.Count;
             }
         }
 
-        public void Add(DataColumn colToAdd)
+        public T this[int intIndex]
         {
-            this.Add(colToAdd.ColumnName, colToAdd);
+            get
+            {
+                return dict.ElementAt(intIndex).Value;
+            }
         }
+
+        //========================================================================
+        // Totally hacktasticly cheating here on down for now.  Never do this.
+        // TODO: I should at least protect the accepted typesin the constructor
+        // and rename this type to something less generic.
+        //========================================================================
+        public bool Contains(string strName)
+        {
+            bool foundName = false;
+            if (typeof(T).ToString().Contains("DataColumn"))
+            {
+                foreach (KeyValuePair<object, T> kvp in dict)
+                {
+                    if (strName.Equals((DataColumn)(object)kvp.Value.ToString()))
+                    {
+                        foundName = true;
+                        break;
+                    }
+                }
+            }
+            return foundName;
+        }
+
+        public T this[string strName]
+        {
+            get
+            {
+                T t2ret = default(T);
+                bool foundCol = false;
+                if (typeof(T).ToString().Contains("DataColumn"))
+                {
+                    foreach (T col in this)
+                    {
+                        DataColumn tempCol = (DataColumn)(object)col;
+                        if (tempCol.ColumnName == strName)
+                        {
+                            t2ret = col;
+                            foundCol = true;
+                            break;
+                        }
+                    }
+                }
+                if (!foundCol)
+                    throw new Exception("Column " + strName + " was not found in this collection.");
+                return t2ret;
+            }
+            //set
+            //{
+            //}
+        }
+        //========================================================================
+        //========================================================================
     }
 
     public class DataTable
     {
         public bool CaseSensitive = false;  // not actually live/used.
         public List<DataRow> Rows = new List<DataRow>();
-        private DictionaryPlusColumn _columns = new DictionaryPlusColumn();
+        public DictionaryBackedSet<DataColumn> Columns = new DictionaryBackedSet<DataColumn>();
 
         public string TableName = string.Empty;
         public DataView DefaultView = null;
-
-        public List<DataColumn> Columns
-        {
-            get
-            {
-                List<DataColumn> cols = new List<DataColumn>();
-                foreach (KeyValuePair<string, DataColumn> kvp in _columns)
-                {
-                    cols.Add(kvp.Value);
-                }
-                return cols;
-            }
-        }
 
         public DataTable()
         {
@@ -66,9 +136,9 @@ namespace org.rufwork.polyfills.data
         {
             DataRow newRow = new DataRow();
 
-            foreach (KeyValuePair<string, DataColumn> kvpStringDataCol in _columns)
+            foreach (DataColumn col in Columns)
             {
-                newRow.Add(kvpStringDataCol.Value, null);
+                newRow.Add(col, null);
             }
 
             return newRow;
@@ -154,10 +224,17 @@ namespace org.rufwork.polyfills.data
         {
             this.baseTable = baseTable;
         }
+
+        public DataTable ToTable()
+        {
+            return this.sortedTable;
+        }
     }
 
     public class DataColumn
     {
+        public int MaxLength = -1;  // not used. for duck typing only.
+
         private System.Type _dataType = null;
         public System.Type DataType
         {

@@ -83,7 +83,7 @@ namespace DataShim
             row[col2] = "Computer Set";
             row[col3] = true;
             row[col4] = "New computer set";
-            row[4] = 32000.00;  // okay, I changed this to make sure indexes worked.
+            row[col5] = 32000.00;  // okay, I changed this to make sure indexes worked.
             row[col6] = "NEW BRAND-1100";
             row[col7] = "Purchased on July 30,2008";
 
@@ -102,6 +102,9 @@ namespace DataShim
             row[col7] = "Different remarks.";
             table.Rows.Add(row);
 
+            Console.WriteLine(col1.GetType().ToString());
+            Console.WriteLine(table.Columns[0].GetType().ToString());
+            Console.WriteLine(table.Rows[table.Columns[0]]);
             Console.WriteLine(Program.dataTableToString(table));
 
             Console.WriteLine("Return to end");
