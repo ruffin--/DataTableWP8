@@ -33,22 +33,40 @@ namespace org.rufwork.polyfills.data
 
     public class DataTable
     {
+        public bool CaseSensitive = false;  // not actually live/used.
         public List<DataRow> Rows = new List<DataRow>();
-        public DictionaryPlusColumn Columns = new DictionaryPlusColumn();
+        private DictionaryPlusColumn _columns = new DictionaryPlusColumn();
 
         public string TableName = string.Empty;
-
         public DataView DefaultView = null;
+
+        public List<DataColumn> Columns
+        {
+            get
+            {
+                List<DataColumn> cols = new List<DataColumn>();
+                foreach (KeyValuePair<string, DataColumn> kvp in _columns)
+                {
+                    cols.Add(kvp.Value);
+                }
+                return cols;
+            }
+        }
 
         public DataTable()
         {
+        }
+
+        public DataTable(string strTableName)
+        {
+            this.TableName = strTableName;
         }
 
         public DataRow NewRow()
         {
             DataRow newRow = new DataRow();
 
-            foreach (KeyValuePair<string, DataColumn> kvpStringDataCol in this.Columns)
+            foreach (KeyValuePair<string, DataColumn> kvpStringDataCol in _columns)
             {
                 newRow.Add(kvpStringDataCol.Value, null);
             }
@@ -57,8 +75,22 @@ namespace org.rufwork.polyfills.data
         }
     }
 
-    public class DataRow : Dictionary<DataColumn, object>
+    public class DataRow : Dictionary<DataColumn, object>, IComparable
     {
+        private int _findIndexByColName(string strColName)
+        {
+            int intColFound = -1;
+            for (int i = 0; i < this.Count(); i++)
+            {
+                if (strColName.Equals(this.ElementAt(i).Key.ColumnName, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    intColFound = i;
+                    break;
+                }
+            }
+            return intColFound;
+        }
+
         public object this[int intIndex]
         {
             get
@@ -70,6 +102,31 @@ namespace org.rufwork.polyfills.data
                 DataColumn dc = this.ElementAt(intIndex).Key;
                 this[dc] = value;
             }
+        }
+
+        public object this[string strColName]
+        {
+            get
+            {
+                int intCol = _findIndexByColName(strColName);
+                if (intCol < 0)
+                    throw new Exception("Column " + strColName + " does not exist in this row.");
+                return this[intCol];
+            }
+
+            set
+            {
+                int intCol = _findIndexByColName(strColName);
+                if (intCol < 0)
+                    throw new Exception("Column " + strColName + " does not exist in this row.");
+                this[intCol] = value;
+
+            }
+        }
+
+        public int CompareTo(object obj)
+        {
+            throw new NotImplementedException();
         }
     }
 
