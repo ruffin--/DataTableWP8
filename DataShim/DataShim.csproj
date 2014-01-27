@@ -9,8 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DataShim</RootNamespace>
     <AssemblyName>DataShim</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <StartupObject>DataShim.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -21,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,9 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="org\rufwork\collections\DictionaryBackedSet.cs" />
+    <Compile Include="org\rufwork\polyfills\data\collections\DataColumnSet.cs" />
+    <Compile Include="org\rufwork\polyfills\data\DataTable.cs" />
+    <Compile Include="org\rufwork\polyfills\data\DataRow.cs" />
+    <Compile Include="org\rufwork\polyfills\data\DataColumn.cs" />
+    <Compile Include="org\rufwork\polyfills\data\DataView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -56,4 +64,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="org\" />
+    <Folder Include="org\rufwork\collections\" />
+    <Folder Include="org\rufwork\polyfills\data\collections\" />
+  </ItemGroup>
 </Project>
