@@ -20,7 +20,7 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
-using org.rufwork.polyfills.data;
+using org.rufwork.shims.data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -162,7 +162,5 @@ namespace DataShim
 
             return strReturn;
         }
-
-
     }
 }

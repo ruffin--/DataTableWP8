@@ -13,7 +13,7 @@ using org.rufwork.collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace org.rufwork.polyfills.data
+namespace org.rufwork.shims.data
 {
     public class DataView
     {

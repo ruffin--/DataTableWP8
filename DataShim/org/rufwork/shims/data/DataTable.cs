@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using org.rufwork.collections;
-using org.rufwork.polyfills.data.collections;
+using org.rufwork.shims.data.collections;
 
-namespace org.rufwork.polyfills.data
+namespace org.rufwork.shims.data
 {
     public class DataTable
     {
