@@ -74,30 +74,12 @@ namespace org.rufwork.polyfills.data
                         dictRowNumThenIntValue.Add(i, (IComparable)this.baseTable.Rows[i][intTempIndex]);
                     }
 
-                    if (astrSort[1].Equals("DESC"))
-                    {
+                    if (astrSort[1].Equals("DESC", StringComparison.CurrentCultureIgnoreCase))
                         foreach (KeyValuePair<int, IComparable> rowNumThenValue in dictRowNumThenIntValue.OrderByDescending(entry => entry.Value))
-                        {
-                            DataRow newRow = dtReturn.NewRow();
-                            foreach (DataColumn dc in dtReturn.Columns)
-                            {
-                                newRow[dc] = this.baseTable.Rows[rowNumThenValue.Key][dc.ColumnName];
-                            }
-                            dtReturn.Rows.Add(newRow);
-                        }
-                    }
-                    else
-                    {
+                            dtReturn.Rows.Add(_copyRow(dtReturn.NewRow(), dtReturn.Columns, rowNumThenValue.Key));
+                    else if (astrSort[1].Equals("ASC", StringComparison.CurrentCultureIgnoreCase))
                         foreach (KeyValuePair<int, IComparable> rowNumThenValue in dictRowNumThenIntValue.OrderBy(entry => entry.Value))
-                        {
-                            DataRow newRow = dtReturn.NewRow();
-                            foreach (DataColumn dc in dtReturn.Columns)
-                            {
-                                newRow[dc] = this.baseTable.Rows[rowNumThenValue.Key][dc.ColumnName];
-                            }
-                            dtReturn.Rows.Add(newRow);
-                        }
-                    }
+                            dtReturn.Rows.Add(_copyRow(dtReturn.NewRow(), dtReturn.Columns, rowNumThenValue.Key));
                     break;
 
                 default:
@@ -105,6 +87,15 @@ namespace org.rufwork.polyfills.data
             }
 
             return dtReturn;
+        }
+
+        private DataRow _copyRow(DataRow newRow, IEnumerable<DataColumn> newTableColumns, int intBaseTableRowToCopy)
+        {
+            foreach (DataColumn dc in newTableColumns)
+            {
+                newRow[dc] = this.baseTable.Rows[intBaseTableRowToCopy][dc.ColumnName];
+            }
+            return newRow;
         }
 
         private DataTable _dupeTableNoData()
@@ -117,17 +108,6 @@ namespace org.rufwork.polyfills.data
                 colNew.DataType = col.DataType;
                 dtOut.Columns.Add(colNew);
             }
-
-            //foreach (DataRow row in this.baseTable.Rows)
-            //{
-            //    DataRow rowNew = dtOut.NewRow();
-            //    for (int i = 0; i < this.baseTable.Columns.Count; i++)
-            //    {
-            //        rowNew[i] = row[i];
-            //    }
-            //    dtOut.Rows.Add(rowNew);
-            //}
-
             return dtOut;
         }
 
