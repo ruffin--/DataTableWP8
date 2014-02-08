@@ -64,9 +64,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="org\" />
-    <Folder Include="org\rufwork\collections\" />
-    <Folder Include="org\rufwork\polyfills\data\collections\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

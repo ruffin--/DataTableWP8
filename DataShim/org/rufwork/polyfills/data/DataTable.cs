@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using org.rufwork.collections;
+using org.rufwork.polyfills.data.collections;
 
 namespace org.rufwork.polyfills.data
 {
@@ -8,13 +9,14 @@ namespace org.rufwork.polyfills.data
     {
         public bool CaseSensitive = false;  // not actually live/used.
         public List<DataRow> Rows = new List<DataRow>();
-        public DictionaryBackedSet<DataColumn> Columns = new DictionaryBackedSet<DataColumn>();
+        public DataColumnSet Columns = new DataColumnSet();
 
         public string TableName = string.Empty;
         public DataView DefaultView = null;
 
         public DataTable()
         {
+            this.DefaultView = new DataView(this);
         }
 
         public DataTable(string strTableName)
@@ -24,13 +26,7 @@ namespace org.rufwork.polyfills.data
 
         public DataRow NewRow()
         {
-            DataRow newRow = new DataRow();
-
-            foreach (DataColumn col in Columns)
-            {
-                newRow.Add(col, null);
-            }
-
+            DataRow newRow = new DataRow(this.Columns);
             return newRow;
         }
     }

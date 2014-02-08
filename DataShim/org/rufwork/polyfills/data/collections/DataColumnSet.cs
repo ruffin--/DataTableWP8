@@ -21,7 +21,7 @@ namespace org.rufwork.polyfills.data.collections
             return foundName;
         }
 
-        public bool Add(DataColumn item)
+        public new bool Add(DataColumn item)
         {
             bool bReturn = false;
 

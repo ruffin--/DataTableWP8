@@ -1,11 +1,20 @@
+using org.rufwork.polyfills.data.collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace org.rufwork.polyfills.data
 {
-	public class DataRow : Dictionary<DataColumn, object>, IComparable
+	public class DataRow : Dictionary<DataColumn, object>
 	{
+        public DataRow(DataColumnSet columns)
+        {
+            foreach (DataColumn col in columns)
+            {
+                this.Add(col, null);
+            }
+        }
+
 		private int _findIndexByColName(string strColName)
 		{
 			int intColFound = -1;
@@ -24,7 +33,7 @@ namespace org.rufwork.polyfills.data
 		{
 			get
 			{
-				return this.ElementAt(intIndex);
+				return this.ElementAt(intIndex).Value;
 			}
 			set
 			{
@@ -52,11 +61,6 @@ namespace org.rufwork.polyfills.data
 
 			}
 		}
-
-		public int CompareTo(object obj)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }
 

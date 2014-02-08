@@ -87,13 +87,13 @@ namespace DataShim
             row[col6] = "NEW BRAND-1100";
             row[col7] = "Purchased on July 30,2008";
 
-			//Add the Row into DataTable
+            //Add the Row into DataTable
             table.Rows.Add(row);
 
             // I'm back from the borrowed code, adding a second line.
             //Create a Row in the DataTable table
             row = table.NewRow();
-            row[col1] = 3131;
+            row[col1] = 131;
             row[col2] = "Another name";
             row[col3] = false;
             row[col4] = "Better than a computer set.";
@@ -104,10 +104,16 @@ namespace DataShim
 
             Console.WriteLine(col1.GetType().ToString());
             Console.WriteLine(table.Columns[0].GetType().ToString());
-			//Console.WriteLine(table.Rows[table.Columns[0]]);
+            Console.WriteLine(table.Rows[0][table.Columns[0]]);
             Console.WriteLine(Program.dataTableToString(table));
 
-			Console.WriteLine("Return to end.");
+            //table.DefaultView.Sort = "Description DESC";
+            table.DefaultView.Sort = "ID ASC";
+            table = table.DefaultView.ToTable();
+
+            Console.WriteLine(Program.dataTableToString(table));
+
+            Console.WriteLine("Return to end.");
             Console.ReadLine();
         }
 
