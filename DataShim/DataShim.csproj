@@ -44,14 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="org\rufwork\shims\data\collections\DataColumnSet.cs" />
+    <Compile Include="org\rufwork\shims\data\DataColumn.cs" />
+    <Compile Include="org\rufwork\shims\data\DataRow.cs" />
+    <Compile Include="org\rufwork\shims\data\DataTable.cs" />
+    <Compile Include="org\rufwork\shims\data\DataView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="org\rufwork\collections\DictionaryBackedSet.cs" />
-    <Compile Include="org\rufwork\polyfills\data\collections\DataColumnSet.cs" />
-    <Compile Include="org\rufwork\polyfills\data\DataTable.cs" />
-    <Compile Include="org\rufwork\polyfills\data\DataRow.cs" />
-    <Compile Include="org\rufwork\polyfills\data\DataColumn.cs" />
-    <Compile Include="org\rufwork\polyfills\data\DataView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
