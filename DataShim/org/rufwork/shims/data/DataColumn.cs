@@ -5,6 +5,7 @@ namespace org.rufwork.shims.data
     public class DataColumn
     {
         public int MaxLength = -1;  // not used. for duck typing only.
+        private int _requestedOrdinal = Int32.MinValue;
 
         private System.Type _dataType = null;
         public System.Type DataType
@@ -27,6 +28,16 @@ namespace org.rufwork.shims.data
         public DataColumn(string strName)
         {
             this.ColumnName = strName;
+        }
+
+        public void SetOrdinal(int intRequestedOrdinal)
+        {
+            _requestedOrdinal = intRequestedOrdinal;
+        }
+
+        public int GetRequestedOrdinal()
+        {
+            return _requestedOrdinal;
         }
     }
 }

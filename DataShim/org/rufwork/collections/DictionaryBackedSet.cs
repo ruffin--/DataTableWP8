@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using org.rufwork.shims;
+
 namespace org.rufwork.collections
 {
     public class DictionaryBackedSet<T> : IEnumerable<T>
@@ -26,10 +28,9 @@ namespace org.rufwork.collections
             {
                 return false;
             }
-            // MEGATODO: Needs to be changed to take the DataColumn's name when T is a Datacolumn.
-            // Waiting until I extend properly, however.  Hacky for testing now.
+            // Hacky for testing now. Extended in DataColumnSet
             string strRandomKey = Guid.NewGuid().ToString();
-            Console.WriteLine("Random key: " + strRandomKey);
+            PCLConsole.WriteLine("Random key: " + strRandomKey);
             dict.Add(strRandomKey, item);
             return true;
         }
@@ -47,7 +48,7 @@ namespace org.rufwork.collections
             }
         }
 
-        public T this[int intIndex]
+        public virtual T this[int intIndex]
         {
             get
             {

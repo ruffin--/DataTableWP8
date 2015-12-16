@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using org.rufwork.collections;
 using org.rufwork.shims.data;
@@ -50,6 +51,29 @@ namespace org.rufwork.shims.data.collections
                 if (!foundCol)
                     throw new Exception ("Column " + strName + " was not found in this collection.");
                 return t2ret;
+            }
+        }
+
+        public override DataColumn this[int intIndex]
+        {
+            get
+            {
+                DataColumn dcReturn = dict.ElementAt(intIndex).Value;
+                if (dict.Any(kvp => kvp.Value.GetRequestedOrdinal() > int.MinValue))
+                {
+                    Dictionary<object, DataColumn> dictTemp = dict.OrderBy(kvp => kvp.Value.GetRequestedOrdinal())
+                        .ToDictionary(x => x.Key, x => x.Value);
+                    dcReturn = dict.ElementAt(intIndex).Value;
+                }
+                return dcReturn;
+            }
+        }
+
+        public void Remove(string strColName)
+        {
+            foreach (KeyValuePair<object, DataColumn> kvp in dict)
+            {
+
             }
         }
     }
